@@ -1,0 +1,92 @@
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    role ENUM('CUSTOMER', 'SERVICE_PROVIDER', 'ADMIN') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE service_providers (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT UNIQUE NOT NULL,
+    business_name VARCHAR(255) NOT NULL,
+    service_category VARCHAR(100) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    verified BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE services (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    provider_id BIGINT NOT NULL,
+    service_name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2) NOT NULL,
+    duration VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (provider_id) REFERENCES service_providers(id) ON DELETE CASCADE
+);
+
+CREATE TABLE bookings (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    customer_id BIGINT NOT NULL,
+    service_id BIGINT NOT NULL,
+    provider_id BIGINT NOT NULL,
+    booking_date TIMESTAMP NOT NULL,
+    status ENUM('PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED') DEFAULT 'PENDING',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE,
+    FOREIGN KEY (provider_id) REFERENCES service_providers(id) ON DELETE CASCADE
+);
+
+CREATE TABLE reviews (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    booking_id BIGINT UNIQUE NOT NULL,
+    rating INT CHECK (rating BETWEEN 1 AND 5),
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE
+);
+
+CREATE TABLE service_history (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    customer_id BIGINT NOT NULL,
+    provider_id BIGINT NOT NULL,
+    service_id BIGINT NOT NULL,
+    booking_id BIGINT NOT NULL UNIQUE,
+    service_date TIMESTAMP NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (provider_id) REFERENCES service_providers(id) ON DELETE CASCADE,
+    FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE,
+    FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE
+);
+
+CREATE TABLE admin_logs (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    admin_id BIGINT NOT NULL,
+    action VARCHAR(255) NOT NULL,
+    details TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE locations (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    region VARCHAR(100) NOT NULL
+);
+
+
+Relationships Summary (ERD Insights)
+1. Users & Roles: Users table handles Customers, Service Providers, and Admins.
+2. Service Providers: Verified professionals who offer repair services.
+3. Services: Each provider has multiple services (one-to-many).
+4. Bookings: Customers book services, with status tracking.
+5. Reviews: Customers leave reviews based on completed bookings.
+6. Service History: Tracks completed services.
+7. Admin Management: Admins monitor users & providers.
+8. Location-Based Filtering: Users can find services in their area.
