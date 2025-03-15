@@ -4,7 +4,7 @@
 A platform that connects users with professional repair services for electronics, appliances, and vehicles. 
 
 # Features: 
-User registration & authentication (Spring Security, JWT) 
+User registration & authentication (Spring Security, JWT) \n
 Service provider registration & verification 
 Location-based service listings 
 Booking & scheduling system 
