@@ -6,3 +6,36 @@
 6. ServiceHistory table: Done and Tested(NEEDS SOME DEEP LOGIC)
 7. AdminLog table: Done and Tested(NEEDS SOME DEEP LOGIC)
 8. Location table: Done and Tested
+
+
+To add logic step by step according to the way the tables are connected, you can follow these steps:
+
+1. **User Registration & Authentication**:
+   - Implement user registration and authentication using Spring Security and JWT.
+   - Create a `User` entity and repository.
+   - Create a service for user registration and authentication.
+   - Configure Spring Security for JWT-based authentication.
+
+2. **Service Provider Registration & Verification**:
+   - Create a `ServiceProvider` entity and repository.
+   - Implement a service for service provider registration and verification.
+
+3. **Location-Based Service Listings**:
+   - Create a `Location` entity and repository.
+   - Implement a service to list services based on location.
+
+4. **Booking & Scheduling System**:
+   - Create a `Booking` entity and repository.
+   - Implement a service for booking and scheduling.
+
+5. **User Reviews & Ratings**:
+   - Create a `Review` entity and repository.
+   - Implement a service for managing user reviews and ratings.
+
+6. **Service History Tracking**:
+   - Create a `ServiceHistory` entity and repository.
+   - Implement a service for tracking service history.
+
+7. **Admin Dashboard**:
+   - Create an `AdminLog` entity and repository.
+   - Implement a service for managing users and service providers.
